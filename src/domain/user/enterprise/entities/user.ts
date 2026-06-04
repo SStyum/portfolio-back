@@ -4,7 +4,7 @@ import { UniqueEntityId } from "../../../../core/entities/unique-entity-id";
 interface userProps {
   name: string
   email: string
-  password: string
+  password?: string
   payment?: string
 }
 
