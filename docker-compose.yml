@@ -1,0 +1,11 @@
+services:
+  postgres:
+    container_name: portfolio-pg
+    image: postgres
+    ports:
+      - 5450:5432
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: portfolio
+      PGDATA: /data/postgres
