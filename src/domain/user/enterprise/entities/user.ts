@@ -11,19 +11,19 @@ interface userProps {
 export class User extends Entity<userProps>{
 
   get name(){
-    return this.name
+    return this.props.name
   }
 
   get email(){
-    return this.email
+    return this.props.email
   }
 
   get password(){
-    return this.password
+    return this.props.password ?? ''
   }
 
   get payment(){
-    return this.payment ?? ''
+    return this.props.payment ?? ''
   }
 
   set name(value: string){
