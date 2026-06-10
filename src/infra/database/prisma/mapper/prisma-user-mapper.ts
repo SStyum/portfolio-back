@@ -18,8 +18,7 @@ export class PrismaUserMapper {
       id: user.id.toString(),
       name: user.name,
       email: user.email,
-      password: user.email || null,
-      payment: user.payment || null
+      password: user.password || null,
     }
   }
 }
