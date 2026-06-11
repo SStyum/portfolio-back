@@ -12,6 +12,10 @@ datasource db {
   provider = "postgresql"
 }
 
+enum PaymentProvider {
+  STRIPE
+}
+
 enum PaymentStatus {
   PENDING
   PROCESSING
@@ -63,11 +67,11 @@ model Payment {
   stripePaymentIntentId String?
   stripeCustomerId      String?
 
-  amount   Decimal
+  amount   Int
   currency String
 
-  status   String
-  provider String
+  status   PaymentStatus
+  provider PaymentProvider
   metadata Json?
 
   createdAt DateTime @default(now())
