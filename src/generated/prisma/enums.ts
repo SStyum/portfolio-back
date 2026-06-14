@@ -9,7 +9,28 @@
 * 🟢 You can import this file directly.
 */
 
+export const PaymentProvider = {
+  STRIPE: 'STRIPE'
+} as const
+
+export type PaymentProvider = (typeof PaymentProvider)[keyof typeof PaymentProvider]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const PaymentStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  SUCCEEDED: 'SUCCEEDED',
+  FAILED: 'FAILED',
+  CANCELED: 'CANCELED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const UserRole = {
+  FREE: 'FREE',
+  PAID: 'PAID'
+} as const
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
