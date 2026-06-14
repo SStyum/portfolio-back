@@ -18,6 +18,9 @@ import { PrismaUserRepository } from "./prisma/repositories/user-prisma-reposito
   exports: [
     PrismaService,
 
+    //payment
+    
+
     //user
     UsersRepository
   ]
