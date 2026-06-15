@@ -16,7 +16,7 @@ export type PaymentStatus =
 export type PaymentProvider = "STRIPE" ;
 
 interface PaymentProps {
-  userId: string;
+  userId: UniqueEntityId;
   provider: PaymentProvider;
 
   // ID externo genérico — pode ser da Stripe, MercadoPago, etc.
@@ -32,7 +32,7 @@ interface PaymentProps {
   metadata?: Record<string, unknown>;
 
   // TO DO
-  eventId: string
+  eventId?: string
 
   createdAt: Date;
   updatedAt?: Date;

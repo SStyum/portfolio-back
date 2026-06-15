@@ -1,16 +1,19 @@
+import { PaymentStatus } from "../../generated/prisma/enums";
+
 export const PAYMENT_PROVIDER = Symbol('PAYMENT_PROVIDER');
 
 export interface CreatePaymentInput {
-  amount: number;        // em centavos
-  currency: string;      // 'brl', 'usd'
-  customerId?: string;
+  userId: string
+  amount: number        // em centavos
+  currency: string      // 'brl', 'usd'
+  customerId?: string
   metadata?: Record<string, string>;
 }
 
 export interface CreatePaymentOutput {
   paymentIntentId: string;
   clientSecret: string;
-  status: string;
+  status: PaymentStatus;
   customerId?: string;
 }
 
