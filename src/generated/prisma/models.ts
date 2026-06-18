@@ -9,6 +9,10 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User.js'
+export type * from './models/Chat.js'
+export type * from './models/Message.js'
+export type * from './models/UserMemory.js'
+export type * from './models/Knowledge.js'
 export type * from './models/Post.js'
 export type * from './models/Payment.js'
 export type * from './commonInputTypes.js'
