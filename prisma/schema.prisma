@@ -37,10 +37,61 @@ model User {
   role     UserRole @default(FREE)
   password String?
 
+  chat    Chat[]
   user    Post[]
   payment Payment[]
+  memory  UserMemory[]
 
   @@map("users")
+}
+
+model Chat {
+  id     String @id @default(uuid())
+  title  String
+  userId String
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  messages Message[]
+
+  @@map("chats")
+}
+
+model Message {
+  id      String @id @default(uuid())
+  role    String
+  content String
+  chatId  String
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  chat Chat @relation(fields: [chatId], references: [id])
+
+  @@map("messages")
+}
+
+model UserMemory {
+  id     String @id @default(uuid())
+  userId String
+
+  content String
+
+  embedding Json
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Knowledge {
+  id        String @id @default(uuid())
+  title     String
+  content   String
+  embedding Unsupported("vector(768)")
+
+  @@map("knowledges")
 }
 
 model Post {
