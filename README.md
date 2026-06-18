@@ -1,98 +1,241 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ npm install
-```
-
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+# Core
+[x] - DDD
+[x] - Clean Architecture
+[] - CQRS (opcional)
+[] - SOLID
+[] - Domain Events
+[] - Repository Pattern
+[] - Unit of Work
+[] - Result Pattern
+[] - Either Pattern
+[] - Value Objects
+[] - Entities
+[] - Aggregates
+[] - Use Cases
+[] - DTOs
+[] - Mappers
+[] - Exception Filters
+[] - Validation Pipes
+[] - Logger
+[] - Config Module
+[] - Environment Validation
+2. Usuário
+[] - CRUD
+[] - Perfil
+[] - Avatar
+[] - Alteração de senha
+[] - Alteração de email
+[] - Exclusão lógica
+[] - Exclusão definitiva
+[] - Auditoria
+[] - Histórico de login
+[] - Preferências
+[] - Configurações de IA
+[] - Feature Flags por usuário
+3. Autenticação
+[] - JWT
+[] - Refresh Token
+[] - Rotação de Refresh Token
+[] - Logout global
+[] - Logout por dispositivo
+[] - OAuth Google
+[] - OAuth GitHub
+[] - Magic Link
+[] - Confirmação de email
+[] - Recuperação de senha
+[] - MFA/TOTP
+[] - Sessões
+[] - Lista de dispositivos
+4. Permissões
+[] - RBAC
+[] - Policies
+[] - Roles
+[] - Permissions
+[] - Guard customizado
+[] - ACL
+[] - Ownership
+5. Posts
+[] - CRUD
+[] - Draft
+[] - Publicação
+[] - Versionamento
+[] - Soft Delete
+[] - Tags
+[] - Categorias
+[] - Likes
+[] - Favoritos
+[] - Compartilhamento
+[] - Histórico de edição
+6. Comentários
+[] - CRUD
+[] - Respostas
+[] - Threads
+[] - Curtidas
+[] - Denúncias
+[] - Moderação
+7. Pesquisa
+[] - Full Text Search
+[] - Busca vetorial
+[] - Busca híbrida
+[] - Autocomplete
+[] - Sugestões
+[] - Ranking
+8. IA
+[] - Gateway de IA
+[] - Provedor OpenAI
+[] - Provedor Groq
+[] - Provedor Gemini
+[] - Fallback automático
+[] - Streaming
+[] - Contagem de tokens
+[] - Histórico
+[] - Context Window
+[] - Prompt Builder
+[] - Prompt Templates
+[] - Ferramentas (Tool Calling)
+[] - Function Calling
+9. RAG
+[] - Knowledge
+[] - Chunking
+[] - Embedding
+[] - Ingestão automática
+[] - Reindexação
+[] - Busca vetorial
+[] - Similaridade
+[] - Prompt Context
+[] - Versionamento
+[] - Atualização incremental
+10. Memória da IA
+[] - Conversas
+[] - Mensagens
+[] - Memória curta
+[] - Memória longa
+[] - Preferências do usuário
+[] - Resumo automático de conversas antigas
+[] - Busca vetorial da memória
+[] - Recuperação contextual
+11. Chat
+[] - Chats
+[] - Mensagens
+[] - Streaming
+[] - Continuação de conversa
+[] - Renomeação automática
+[] - Arquivamento
+[] - Exclusão
+[] - Exportação
+12. Upload
+[] - Upload local
+[] - AWS S3
+[] - Cloudflare R2
+[] - MinIO
+[] - Upload multipart
+[] - Presigned URL
+[] - Compressão
+[] - Thumbnail
+13. Banco Vetorial
+[] - pgvector
+[] - KnowledgeChunk
+[] - UserMemoryChunk
+[] - Busca KNN
+[] - Similaridade cosseno
+[] - Reindexação
+14. Cache
+[] - Redis
+[] - Cache Aside
+[] - Invalidação
+[] - Cache de IA
+[] - Cache de embeddings
+[] - Cache de consultas
+15. Filas
+[] - BullMQ
+[] - Redis Queue
+[] - Retry
+[] - Dead Letter Queue
+[] - Backoff
+[] - Worker dedicado
+16. Eventos
+[] - Domain Events
+[] - Event Bus
+[] - Integration Events
+[] - Event Handlers
+[] - Outbox Pattern
+17. Scheduler
+[] - Cron
+[] - Reindexação
+[] - Limpeza de cache
+[] - Expiração de sessões
+[] - Resumo de memória
+[] - Jobs automáticos
+18. Notificações
+[] - Email
+[] - Push
+[] - WebSocket
+[] - SMS (mock)
+[] - Preferências de notificação
+19. Pagamentos
+[] - Stripe
+[] - Mercado Pago
+[] - Webhooks
+[] - Idempotência
+[] - Assinaturas
+[] - Upgrade de plano
+[] - Cancelamento
+[] - Reembolso
+20. Observabilidade
+[] - Logs estruturados
+[] - Correlation ID
+[] - Request ID
+[] - Health Check
+[] - Métricas
+[] - Tempo de resposta
+[] - Uso de tokens
+[] - Consumo por usuário
+21. Segurança
+[] - Helmet
+[] - CORS
+[] - Sanitização
+[] - SQL Injection
+[] - XSS
+[] - CSRF
+[] - Rate Limit
+[] - IP Blocking
+[] - Auditoria
+22. API
+[] - Swagger
+[] - Versionamento
+[] - Paginação
+[] - Filtros
+[] - Ordenação
+[] - Cursor Pagination
+[] - ETag
+23. Testes
+[] - Unitários
+[] - Integração
+[] - E2E
+[] - Mocks
+[] - Testes de IA
+[] - Testes de RAG
+[] - Cobertura >90%
+24. Infraestrutura
+[] - Docker
+[] - Docker Compose
+[] - PostgreSQL
+[] - Redis
+[] - pgvector
+[] - MinIO
+[] - Nginx
+[] - CI/CD
+[] - GitHub Actions
+25. Diferenciais que chamam atenção
+[] - Sistema de plugins para provedores de IA
+[] - Troca dinâmica entre OpenAI, Groq e Gemini
+[] - Fallback automático se um provedor falhar
+[] - Streaming SSE/WebSocket
+[] - Memória de longo prazo baseada em embeddings
+[] - RAG sobre base própria
+[] - Ferramentas (Tool Calling) para consultar banco, clima ou APIs
+[] - Dashboard de uso de IA (tokens, custo, latência)
+[] - Cache inteligente de respostas
+[] - Resumo automático de conversas antigas para economizar contexto
+[] - Multi-tenant (cada organização com sua própria base de conhecimento)
+[] - Auditoria completa das chamadas de IA
