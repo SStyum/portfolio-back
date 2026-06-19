@@ -1,8 +1,8 @@
 # Core
 [x] - DDD
 [x] - Clean Architecture
-[] - CQRS (opcional)
-[] - SOLID
+[x] - CQRS (opcional)
+[x] - SOLID
 [] - Domain Events
 [] - Repository Pattern
 [] - Unit of Work
@@ -11,7 +11,7 @@
 [] - Value Objects
 [] - Entities
 [] - Aggregates
-[] - Use Cases
+[x] - Use Cases
 [] - DTOs
 [] - Mappers
 [] - Exception Filters
