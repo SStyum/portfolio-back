@@ -10,7 +10,7 @@ export class PrismaPaymentMapper {
   static toDomain(raw: PrismaPayment): Payment {
     return Payment.create({
       eventId: '',
-      userId: raw.userId,
+      userId: new UniqueEntityId(raw.userId),
       stripePaymentIntentId: raw.stripePaymentIntentId || ' ',
       stripeCustomerId: raw.stripeCustomerId || '',
       amount: raw.amount,
@@ -33,7 +33,7 @@ export class PrismaPaymentMapper {
   static toPrisma(payment: Payment): Omit<PrismaPayment, 'user'> {
     return {
       id: payment.id.toString(),
-      userId: payment.userId,
+      userId: payment.userId.toString(),
       stripePaymentIntentId: payment.stripePaymentIntentId ?? null,
       stripeCustomerId: payment.stripeCustomerId ?? null,
       amount: payment.amount,
