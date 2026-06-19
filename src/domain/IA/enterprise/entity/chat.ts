@@ -19,6 +19,10 @@ export class Chat extends Entity<ChatProps> {
     return this.props.userId
   }
 
+  get messages(){
+    return this.messages
+  }
+
   get createdAt() {
     return this.props.createdAt
   }
