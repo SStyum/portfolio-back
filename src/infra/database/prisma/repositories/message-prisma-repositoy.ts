@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
-import { MessageRepository } from "../../../../domain/IA/application/repositories/message-repository";
-import { Message } from "../../../../domain/IA/enterprise/entity/message";
+import { MessageRepository } from "../../../../domain/AI/application/repositories/message-repository";
+import { Message } from "../../../../domain/AI/enterprise/entity/message";
 import { PrismaMessageMapper } from "../mapper/prisma-message-mapper";
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { PaymentStatus } from "../../../generated/prisma/enums";
+import { PaymentStatus } from "@prisma/client";
 
 export class StripeStatusMapper {
 

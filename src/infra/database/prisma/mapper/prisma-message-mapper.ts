@@ -1,6 +1,6 @@
-import { Prisma, Message as PrismaMessage } from '../../../../generated/prisma/client'
+import { Prisma, Message as PrismaMessage } from '@prisma/client'
 import { UniqueEntityId } from '../../../../core/entities/unique-entity-id'
-import { Message } from '../../../../domain/IA/enterprise/entity/message'
+import { Message } from '../../../../domain/AI/enterprise/entity/message'
 
 export class PrismaMessageMapper {
   static toDomain(raw: PrismaMessage): Message {

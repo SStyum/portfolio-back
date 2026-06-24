@@ -1,4 +1,4 @@
-import { Prisma, Payment as PrismaPayment } from '../../../../generated/prisma/client'
+import { Prisma, Payment as PrismaPayment } from '@prisma/client'
 import { Payment } from '../../../../domain/payment/enterprise/entities/payment';
 import { PaymentStatus, PaymentProvider } from '../../../../domain/payment/enterprise/entities/payment';
 

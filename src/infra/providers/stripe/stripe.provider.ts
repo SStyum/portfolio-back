@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
 import { PaymentProvider, CreatePaymentInput, CreatePaymentOutput } from '../../../core/repositories/payment-provider';
-import { PaymentStatus } from '../../../generated/prisma/enums';
+import { PaymentStatus } from '@prisma/client';
 
 
 @Injectable()

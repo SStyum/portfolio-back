@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { ChatRepository } from "../../../../domain/IA/application/repositories/chat-repository";
+import { ChatRepository } from "../../../../domain/AI/application/repositories/chat-repository";
 import { PrismaService } from "../prisma.service";
-import { Chat } from "../../../../domain/IA/enterprise/entity/chat";
+import { Chat } from "../../../../domain/AI/enterprise/entity/chat";
 import { PrismaChatMapper } from "../mapper/prisma-chat-mapper";
 
 @Injectable()

@@ -1,8 +1,8 @@
-import { Prisma, Chat as PrismaChat } from '../../../../generated/prisma/client'
 import { UniqueEntityId } from '../../../../core/entities/unique-entity-id'
-import { Chat } from '../../../../domain/IA/enterprise/entity/chat'
+import { Chat } from '../../../../domain/AI/enterprise/entity/chat'
 import { PrismaChatWithMessages } from '../../../../core/types/prismaChatWithMessages'
 import { PrismaMessageMapper } from './prisma-message-mapper'
+import { Prisma } from '@prisma/client'
 
 export class PrismaChatMapper {
   static toDomain(raw: PrismaChatWithMessages): Chat {
