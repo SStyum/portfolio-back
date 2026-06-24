@@ -1,6 +1,4 @@
-import { MessageRole } from "../VO/message.role";
-
 export interface AiMessage{
-    role: MessageRole,
+    role: 'user' | 'system' | 'assistant',
     content: string
 }
