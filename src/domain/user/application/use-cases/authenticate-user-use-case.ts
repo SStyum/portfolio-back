@@ -7,12 +7,12 @@ import { HashCompare } from "../cryptography/hash-compare"
 import { Encrypter } from "../cryptography/encrypter"
 
 
-interface AuthenticateStudentUseCaseRequest {
+interface AuthenticateUserUseCaseRequest {
   email: string
   password: string
 }
 
-type AuthenticateStudentUseCaseResponse = Either<
+type AuthenticateUserUseCaseResponse = Either<
   WrongCredentialsError | EmailNotVerifiedError,
   {
     accessToken: string,
@@ -20,7 +20,7 @@ type AuthenticateStudentUseCaseResponse = Either<
 >
 
 @Injectable()
-export class AuthenticateStudentUseCase {
+export class AuthenticateUserUseCase {
 
   constructor(
     private userRepository: UsersRepository,
@@ -32,7 +32,7 @@ export class AuthenticateStudentUseCase {
   async execute({
     email,
     password
-  }: AuthenticateStudentUseCaseRequest): Promise<AuthenticateStudentUseCaseResponse> {
+  }: AuthenticateUserUseCaseRequest): Promise<AuthenticateUserUseCaseResponse> {
     const user = await this.userRepository.findByEmail(email)
 
     if (!user) {
