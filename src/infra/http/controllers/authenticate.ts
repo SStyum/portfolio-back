@@ -2,8 +2,8 @@ import { BadRequestException, Body, Controller, HttpCode, Post, UnauthorizedExce
 import { z } from 'zod';
 import { ZodValidationPipe } from "../pipes/zod-validation-pipe";
 import { Public } from "../../auth/public";
-import { AuthenticateStudentUseCase } from "../../../domain/user/application/use-cases/authenticate-user-use-case";
 import { WrongCredentialsError } from "../../../domain/user/application/use-cases/errors/wrong-credentials-error";
+import { AuthenticateUserUseCase } from "../../../domain/user/application/use-cases/authenticate-user-use-case";
 
 const authenticateBodySchema = z.object({
   email: z.string().email(),
@@ -15,7 +15,7 @@ type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
 @Controller('/sessions')
 export class AuthenticateController {
   constructor(
-    private authenticateStudent: AuthenticateStudentUseCase,
+    private authenticateUser: AuthenticateUserUseCase,
   ) { }
 
   @Post()
@@ -26,7 +26,7 @@ export class AuthenticateController {
 
     const { email, password } = body
 
-    const result = await this.authenticateStudent.execute({
+    const result = await this.authenticateUser.execute({
       email,
       password
     })
