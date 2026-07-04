@@ -5,7 +5,23 @@ import { PrismaService } from "../prisma.service";
 
 
 export class PrismaUserRepository implements UsersRepository {
+  
   constructor(private prisma: PrismaService) { }
+
+
+  async findById(id: string){
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id
+      }
+    })
+
+    if(!user){
+      return null
+    }
+
+    return PrismaUserMapper.toDomain(user)
+  }
 
   async create(user: User): Promise<void> {
     const data = PrismaUserMapper.toPrisma(user)
