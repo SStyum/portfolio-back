@@ -9,7 +9,7 @@ const createAccountBodySchema = z.object({
   name: z.string(),
   email: z.string(),
   password: z.string(),
-  payment: z.string().nullable()
+  payment: z.string().nullable().optional()
 })
 
 type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
@@ -18,7 +18,9 @@ type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
 export class CreateAccountController {
   constructor(
     private createAccountUseCase: CreateAccountUseCase
-  ){}
+  ){
+    console.log('CreateAccountController loaded')
+  }
 
   @Post()
   @Public()

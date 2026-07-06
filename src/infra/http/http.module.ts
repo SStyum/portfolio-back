@@ -12,12 +12,14 @@ import { CreateAccountUseCase } from '../../domain/user/application/use-cases/cr
 import { CreateChatUseCase } from '../../domain/AI/application/use-cases/create-chat-use-case';
 import { GetUserUseCase } from '../../domain/user/application/use-cases/get-user-use-case';
 import { GetUserController } from './controllers/get-user.controller';
+import { CryptographyModule } from '../cryptography/cryptography.module';
 
 @Module({
   imports: [
     DatabaseModule,
     AIModule,
-    AuthModule
+    AuthModule,
+    CryptographyModule
   ],
   controllers: [
     //User

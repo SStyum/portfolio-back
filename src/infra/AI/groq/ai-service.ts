@@ -1,13 +1,14 @@
 import { Injectable } from "@nestjs/common"
 import { AiService } from "../../../domain/AI/application/gateway/ai.gateway"
-import { EnvService } from "../../env/env.service"
+import { ConfigService } from '@nestjs/config';
 import { AiMessage } from "../../../core/DTO/Ai.message"
 import { OpenAI } from 'openai'
+import { Env } from "../../env/env";
 
 @Injectable()
 export class GroqProvider implements AiService {
   constructor(
-    private env: EnvService,
+    private env: ConfigService<Env, true>,
   ) {}
 
   async chat(messages: AiMessage[]) {
