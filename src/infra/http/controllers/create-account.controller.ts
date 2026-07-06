@@ -1,4 +1,4 @@
-import { BadRequestException, Body, ConflictException, Controller, HttpCode, Post, UsePipes } from "@nestjs/common";
+import { BadRequestException, Body, ConflictException, Controller, HttpCode, Post, UnauthorizedException, UsePipes } from "@nestjs/common";
 import { CreateAccountUseCase } from "../../../domain/user/application/use-cases/create-user-use-case";
 import { Public } from "../../auth/public";
 import z from "zod";
@@ -41,7 +41,7 @@ export class CreateAccountController {
 
       switch (error.constructor) {
         case UserAlreadyExistsError:
-          throw new ConflictException(error.message)
+          throw new UnauthorizedException(error.message)
         default:
           throw new BadRequestException(error.message)
       }

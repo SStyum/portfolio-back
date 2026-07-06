@@ -5,6 +5,7 @@ import { WrongCredentialsError } from "./errors/wrong-credentials-error"
 import { EmailNotVerifiedError } from "./errors/email-not-verified-error"
 import { User } from "../../enterprise/entities/user"
 import { HashGenerator } from "../cryptography/hash-generator"
+import { UserAlreadyExistsError } from "./errors/user-already-exists-error"
 
 
 interface CreateAccountUseCaseRequest {
@@ -15,7 +16,7 @@ interface CreateAccountUseCaseRequest {
 }
 
 type CreateAccountUseCaseResponse = Either<
-  WrongCredentialsError | EmailNotVerifiedError,
+  UserAlreadyExistsError | UnauthorizedException,
   {
     user: User,
   }
@@ -41,7 +42,7 @@ export class CreateAccountUseCase {
     const hashedPassword = await this.hashGenerator.hash(password)
 
     if (userAlreadyExists) {
-      return left(new UnauthorizedException())
+      return left(new UserAlreadyExistsError(email))
     }
 
     const user = User.create({
