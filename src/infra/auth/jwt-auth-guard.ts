@@ -24,14 +24,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       return false;
     }
 
-    const request = context.switchToHttp().getRequest();
-    const user = request.user;
-
-    // Instructors têm acesso total a qualquer rota protegida
-    if (user?.role === 'INSTRUCTOR') {
-      return true;
-    }
-
     return true;
   }
 }

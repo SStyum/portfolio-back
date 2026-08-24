@@ -11,7 +11,7 @@ export class StripeProvider implements PaymentProvider {
 
   constructor(private readonly config: ConfigService) {
     this.stripe = new Stripe(this.config.get<string>('stripe.secretKey')!, {
-      apiVersion: '2026-05-27.dahlia',
+      apiVersion: '2026-07-29.dahlia',
     });
   }
 

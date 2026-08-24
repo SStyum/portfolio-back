@@ -1,7 +1,7 @@
 services:
   postgres:
     container_name: portfolio-pg
-    image: postgres
+    image: pgvector/pgvector:pg17
     ports:
       - 5450:5432
     environment:

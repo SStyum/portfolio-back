@@ -18,9 +18,7 @@ type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
 export class CreateAccountController {
   constructor(
     private createAccountUseCase: CreateAccountUseCase
-  ){
-    console.log('CreateAccountController loaded')
-  }
+  ){  }
 
   @Post()
   @Public()

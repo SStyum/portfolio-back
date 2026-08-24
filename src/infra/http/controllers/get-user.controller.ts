@@ -1,8 +1,7 @@
 import { BadRequestException, Controller, Get, UseGuards } from "@nestjs/common";
 import { GetUserUseCase } from "../../../domain/user/application/use-cases/get-user-use-case";
 import { CurrentUser } from "../../auth/current-user-decorator";
-import { JwtAuthGuard } from "../../auth/jwt-auth-guard";
-import { UserPayload } from "../../auth/jwt.stratefy";
+import { UserPayload } from "../../auth/jwt.strategy";
 import { UserPresenter } from "../presenters/user-presenter";
 
 @Controller('/me')
@@ -12,7 +11,6 @@ export class GetUserController {
   ) { }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   async handle(
     @CurrentUser() user: UserPayload
   ) {

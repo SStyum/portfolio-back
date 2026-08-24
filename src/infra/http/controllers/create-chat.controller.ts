@@ -6,7 +6,7 @@ import {
 
 import { CreateChatUseCase } from '../../../domain/AI/application/use-cases/create-chat-use-case'
 import { CurrentUser } from '../../auth/current-user-decorator'
-import { UserPayload } from '../../auth/jwt.stratefy'
+import { UserPayload } from '../../auth/jwt.strategy'
 
 @Controller('/chats')
 export class CreateChatController {
