@@ -1,5 +1,5 @@
-// Para adicionar Kafka/RabbitMQ: inclua aqui e registre o publisher em messaging.module.ts
-export const MESSAGING_PROVIDERS = ["SQS"] as const;
+// Para adicionar Kafka: inclua aqui e registre o publisher em messaging.module.ts
+export const MESSAGING_PROVIDERS = ["SQS", "RABBITMQ"] as const;
 export type MessagingProviderName = typeof MESSAGING_PROVIDERS[number];
 
 export interface Message<T = unknown> {
