@@ -1,14 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
-import {
-  PAYMENT_PROVIDER,
-  type PaymentProvider,
-  CreatePaymentInput
-} from '../../../../core/repositories/payment-provider';
+import { Injectable } from '@nestjs/common';
+import { PaymentGateway } from '../gateway/payment.gateway';
 import { Either, right } from '../../../../core/either';
 import { Payment } from '../../enterprise/entities/payment';
 import { PaymentsRepository } from '../repository/payments-repository';
 import { UniqueEntityId } from '../../../../core/entities/unique-entity-id';
-import { StripeStatusMapper } from '../../../../core/utils/mapper/payment.status.mapper';
 
 interface CreatePaymentUseCaseRequest {
   userId: string;
@@ -16,25 +11,22 @@ interface CreatePaymentUseCaseRequest {
   currency: string;
   customerId?: string;
   metadata?: Record<string, string>;
-
 }
 
 type CreatePaymentUseCaseResponse = Either<null, {
   payment: Payment
+  clientPayload: Record<string, unknown>
 }>
-
-
 
 @Injectable()
 export class CreatePaymentUseCase {
   constructor(
-    @Inject(PAYMENT_PROVIDER)
-    private readonly paymentProvider: PaymentProvider,
+    private readonly paymentGateway: PaymentGateway,
     private readonly paymentRepository: PaymentsRepository
   ) { }
-  async execute({ userId, amount, currency, customerId, metadata }: CreatePaymentUseCaseRequest): Promise <CreatePaymentUseCaseResponse> {
+  async execute({ userId, amount, currency, customerId, metadata }: CreatePaymentUseCaseRequest): Promise<CreatePaymentUseCaseResponse> {
 
-    const result = await this.paymentProvider.createPayment({
+    const result = await this.paymentGateway.createPayment({
       userId,
       amount,
       currency,
@@ -44,12 +36,12 @@ export class CreatePaymentUseCase {
 
     const payment = Payment.create({
       userId: new UniqueEntityId(userId),
-      provider: "STRIPE",
-      stripePaymentIntentId: result.paymentIntentId,
-      stripeCustomerId: result.customerId,
+      provider: this.paymentGateway.name,
+      externalId: result.externalId,
+      externalCustomerId: result.externalCustomerId,
       amount: amount,
       currency: currency,
-      status: StripeStatusMapper.toDomain(result.status),
+      status: result.status,
       metadata: metadata,
       eventId: "",
       createdAt: new Date(),
@@ -60,7 +52,7 @@ export class CreatePaymentUseCase {
     // TODO Emitir evento, etc.
     return right({
       payment,
-      clientSecret: result.clientSecret
+      clientPayload: result.clientPayload
     })
   }
 }

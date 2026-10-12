@@ -114,8 +114,8 @@ model Payment {
   eventId String? @unique
   userId  String
 
-  stripePaymentIntentId String?
-  stripeCustomerId      String?
+  externalId         String
+  externalCustomerId String?
 
   amount   Int
   currency String
@@ -129,5 +129,6 @@ model Payment {
 
   user User @relation(fields: [userId], references: [id])
 
+  @@unique([provider, externalId])
   @@map("payments")
 }

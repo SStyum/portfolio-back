@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
-import { PaymentProvider, CreatePaymentInput, CreatePaymentOutput } from '../../../core/repositories/payment-provider';
-import { PaymentStatus } from '@prisma/client';
-
+import { PaymentGateway, CreatePaymentInput, CreatePaymentOutput } from '../../../domain/payment/application/gateway/payment.gateway';
+import { PaymentStatus } from '../../../domain/payment/enterprise/entities/payment';
+import { EnvService } from '../../env/env.service';
 
 @Injectable()
-export class StripeProvider implements PaymentProvider {
+export class StripePaymentGateway implements PaymentGateway {
+  readonly name = "STRIPE" as const;
   private readonly stripe: Stripe.Stripe;
 
-  constructor(private readonly config: ConfigService) {
-    this.stripe = new Stripe(this.config.get<string>('stripe.secretKey')!, {
+  constructor(env: EnvService) {
+    this.stripe = new Stripe(env.get('STRIPE_SECRET_KEY')!, {
       apiVersion: '2026-07-29.dahlia',
     });
   }
 
-   private mapStatus(status: string): PaymentStatus {
+  private mapStatus(status: Stripe.PaymentIntent.Status): PaymentStatus {
     switch (status) {
       case "requires_payment_method":
       case "requires_confirmation":
@@ -47,16 +47,16 @@ export class StripeProvider implements PaymentProvider {
     });
 
     return {
-      paymentIntentId: intent.id,
-      clientSecret: intent.client_secret!,
-      status: this.mapStatus(intent.status),
-      customerId: typeof intent.customer === 'string'
+      externalId: intent.id,
+      externalCustomerId: typeof intent.customer === 'string'
         ? intent.customer
         : intent.customer?.id,
+      status: this.mapStatus(intent.status),
+      clientPayload: { clientSecret: intent.client_secret },
     };
   }
 
-  async cancelPayment(paymentIntentId: string): Promise<void> {
-    await this.stripe.paymentIntents.cancel(paymentIntentId);
+  async cancelPayment(externalId: string): Promise<void> {
+    await this.stripe.paymentIntents.cancel(externalId);
   }
 }

@@ -1,6 +1,6 @@
 import { Prisma, Payment as PrismaPayment } from '@prisma/client'
 import { Payment } from '../../../../domain/payment/enterprise/entities/payment';
-import { PaymentStatus, PaymentProvider } from '../../../../domain/payment/enterprise/entities/payment';
+import { PaymentStatus, PaymentProviderName } from '../../../../domain/payment/enterprise/entities/payment';
 
 import { UniqueEntityId } from '../../../../core/entities/unique-entity-id'
 
@@ -11,12 +11,12 @@ export class PrismaPaymentMapper {
     return Payment.create({
       eventId: '',
       userId: new UniqueEntityId(raw.userId),
-      stripePaymentIntentId: raw.stripePaymentIntentId || ' ',
-      stripeCustomerId: raw.stripeCustomerId || '',
+      externalId: raw.externalId,
+      externalCustomerId: raw.externalCustomerId ?? undefined,
       amount: raw.amount,
       currency: raw.currency,
       status: raw.status as unknown as PaymentStatus,
-      provider: raw.provider as unknown as PaymentProvider,
+      provider: raw.provider as unknown as PaymentProviderName,
       metadata: raw.metadata
         ? (raw.metadata as Record<string, unknown>)
         : undefined,
@@ -34,8 +34,8 @@ export class PrismaPaymentMapper {
     return {
       id: payment.id.toString(),
       userId: payment.userId.toString(),
-      stripePaymentIntentId: payment.stripePaymentIntentId ?? null,
-      stripeCustomerId: payment.stripeCustomerId ?? null,
+      externalId: payment.externalId,
+      externalCustomerId: payment.externalCustomerId ?? null,
       amount: payment.amount,
       currency: payment.currency,
       status: payment.status,

@@ -3,7 +3,7 @@
 import { Entity } from "../../../../core/entities/entity";
 import { UniqueEntityId } from "../../../../core/entities/unique-entity-id";
 
-// Status do domínio — não da Stripe, ainda sem webhook 
+// Status do domínio — não da Stripe, ainda sem webhook
 //TODO WEBHOOKS to type paymentStatus
 export type PaymentStatus =
   | "PENDING"
@@ -13,22 +13,22 @@ export type PaymentStatus =
   | "CANCELED"
   | "REFUNDED";
 
-export type PaymentProvider = "STRIPE" ;
+// Para adicionar uma API nova: inclua aqui, no enum do Prisma e registre o gateway em payment.module.ts
+export const PAYMENT_PROVIDERS = ["STRIPE"] as const;
+export type PaymentProviderName = typeof PAYMENT_PROVIDERS[number];
 
 interface PaymentProps {
   userId: UniqueEntityId;
-  provider: PaymentProvider;
+  provider: PaymentProviderName;
 
   // ID externo genérico — pode ser da Stripe, MercadoPago, etc.
-  stripePaymentIntentId: string;
-  stripeCustomerId?: string;
+  externalId: string;
+  externalCustomerId?: string;
 
   amount: number;
   currency: string;
   status: PaymentStatus;
 
-  // Opaco pro domínio — cada provider retorna o que precisa pro frontend
-  clientSecret?: string;
   metadata?: Record<string, unknown>;
 
   // TO DO
@@ -48,12 +48,12 @@ export class Payment extends Entity<PaymentProps> {
     return this.props.provider
   }
 
-  get stripePaymentIntentId() {
-    return this.props.stripePaymentIntentId
+  get externalId() {
+    return this.props.externalId
   }
 
-  get stripeCustomerId() {
-    return this.props.stripeCustomerId
+  get externalCustomerId() {
+    return this.props.externalCustomerId
   }
 
   get amount() {
@@ -70,10 +70,6 @@ export class Payment extends Entity<PaymentProps> {
 
   get status() {
     return this.props.status
-  }
-
-  get clientSecret() {
-    return this.props.clientSecret
   }
 
   get metadata() {
