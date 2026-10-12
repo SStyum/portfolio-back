@@ -1,3 +1,5 @@
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { SWAGGER_BEARER } from "../swagger/setup-swagger";
 import {
   Controller,
   Post,
@@ -8,12 +10,15 @@ import { CreateChatUseCase } from '../../../domain/AI/application/use-cases/crea
 import { CurrentUser } from '../../auth/current-user-decorator'
 import { UserPayload } from '../../auth/jwt.strategy'
 
+@ApiTags('AI Chat')
+@ApiBearerAuth(SWAGGER_BEARER)
 @Controller('/chats')
 export class CreateChatController {
   constructor(
     private createChatUseCase: CreateChatUseCase,
   ) {}
 
+  @ApiOperation({ summary: 'Cria um chat com a IA' })
   @Post()
   @HttpCode(201)
   async handle(

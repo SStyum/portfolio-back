@@ -1,14 +1,24 @@
-import { Entity } from "../../../../core/entities/entity";
+import { AggregateRoot } from "../../../../core/entities/aggregate-root";
 import { UniqueEntityId } from "../../../../core/entities/unique-entity-id";
+import { UserCreatedEvent } from "../events/user-created-event";
 
-interface userProps {
+export type UserPlan = "FREE" | "PAID"
+export type UserRole = "USER" | "ADMIN"
+
+interface UserProps {
   name: string
   email: string
+  // Vazio pra quem entrou só com login social
   password?: string
-  payment?: string
+  plan: UserPlan
+  role: UserRole
+  emailVerifiedAt?: Date
+  billingCustomerId?: string
 }
 
-export class User extends Entity<userProps>{
+type CreateUserProps = Omit<UserProps, 'plan' | 'role'> & Partial<Pick<UserProps, 'plan' | 'role'>>
+
+export class User extends AggregateRoot<UserProps>{
 
   get name(){
     return this.props.name
@@ -22,8 +32,32 @@ export class User extends Entity<userProps>{
     return this.props.password ?? ''
   }
 
-  get payment(){
-    return this.props.payment ?? ''
+  get hasPassword(){
+    return !!this.props.password
+  }
+
+  get plan(){
+    return this.props.plan
+  }
+
+  get role(){
+    return this.props.role
+  }
+
+  get emailVerifiedAt(){
+    return this.props.emailVerifiedAt
+  }
+
+  get isEmailVerified(){
+    return !!this.props.emailVerifiedAt
+  }
+
+  get billingCustomerId(){
+    return this.props.billingCustomerId
+  }
+
+  set billingCustomerId(value: string | undefined){
+    this.props.billingCustomerId = value
   }
 
   set name(value: string){
@@ -38,8 +72,25 @@ export class User extends Entity<userProps>{
     this.props.password = value
   }
 
-  static create(props: userProps, id?: UniqueEntityId){
-    const user = new User(props, id)
+  changePlan(plan: UserPlan){
+    this.props.plan = plan
+  }
+
+  verifyEmail(){
+    this.props.emailVerifiedAt ??= new Date()
+  }
+
+  static create(props: CreateUserProps, id?: UniqueEntityId){
+    const user = new User({
+      ...props,
+      plan: props.plan ?? 'FREE',
+      role: props.role ?? 'USER',
+    }, id)
+
+    // Sem id = usuário novo (com id = vindo do banco)
+    if (!id) {
+      user.addDomainEvent(new UserCreatedEvent(user))
+    }
 
     return user
   }

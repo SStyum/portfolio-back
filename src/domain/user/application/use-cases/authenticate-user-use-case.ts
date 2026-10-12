@@ -35,7 +35,8 @@ export class AuthenticateUserUseCase {
   }: AuthenticateUserUseCaseRequest): Promise<AuthenticateUserUseCaseResponse> {
     const user = await this.userRepository.findByEmail(email)
 
-    if (!user) {
+    // Conta só com login social não tem senha
+    if (!user || !user.hasPassword) {
       return left(new WrongCredentialsError())
     }
 
@@ -48,8 +49,15 @@ export class AuthenticateUserUseCase {
       return left(new WrongCredentialsError())
     }
 
+    // Só depois da senha: não revela pra quem não sabe a senha se a conta existe
+    if (!user.isEmailVerified) {
+      return left(new EmailNotVerifiedError())
+    }
+
+    // O plano não vai no token: muda com o pagamento e é lido do banco quando precisa
     const accessToken = await this.encrypter.encrypt({
       sub: user.id.toString(),
+      role: user.role,
     })
 
     return right({

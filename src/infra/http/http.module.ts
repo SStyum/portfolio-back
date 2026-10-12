@@ -16,6 +16,37 @@ import { CryptographyModule } from '../cryptography/cryptography.module';
 import { PaymentModule } from '../providers/payment.module';
 import { StorageModule } from '../storage/storage.module';
 import { MessagingModule } from '../messaging/messaging.module';
+import { NotificationsModule } from '../notifications/notifications.module';
+import { GitHubAuthController } from './controllers/github-auth.controller';
+import { VerifyEmailController } from './controllers/verify-email.controller';
+import { ResendEmailVerificationController } from './controllers/resend-email-verification.controller';
+import { GitHubOAuthService } from '../auth/github/github-oauth.service';
+import { VerifyEmailUseCase } from '../../domain/user/application/use-cases/verify-email-use-case';
+import { SendEmailVerificationUseCase } from '../../domain/user/application/use-cases/send-email-verification-use-case';
+import { AuthenticateWithOAuthUseCase } from '../../domain/user/application/use-cases/authenticate-with-oauth-use-case';
+import { CreateCheckoutSessionController } from './controllers/create-checkout-session.controller';
+import { CreateBillingPortalSessionController } from './controllers/create-billing-portal-session.controller';
+import { GetSubscriptionController } from './controllers/get-subscription.controller';
+import { BillingWebhookController } from './controllers/billing-webhook.controller';
+import { CreateCheckoutSessionUseCase } from '../../domain/payment/application/use-cases/create-checkout-session-use-case';
+import { CreateBillingPortalSessionUseCase } from '../../domain/payment/application/use-cases/create-billing-portal-session-use-case';
+import { GetSubscriptionUseCase } from '../../domain/payment/application/use-cases/get-subscription-use-case';
+import { HandleBillingEventUseCase } from '../../domain/payment/application/use-cases/handle-billing-event-use-case';
+import { EnvModule } from '../env/env.module';
+import { CreatePostController } from './controllers/create-post.controller';
+import { FetchRecentPostsController } from './controllers/fetch-recent-posts.controller';
+import { GetPostController } from './controllers/get-post.controller';
+import { DeletePostController } from './controllers/delete-post.controller';
+import { CommentOnPostController } from './controllers/comment-on-post.controller';
+import { FetchPostCommentsController } from './controllers/fetch-post-comments.controller';
+import { DeleteCommentController } from './controllers/delete-comment.controller';
+import { CreatePostUseCase } from '../../domain/blog/application/use-cases/create-post-use-case';
+import { FetchRecentPostsUseCase } from '../../domain/blog/application/use-cases/fetch-recent-posts-use-case';
+import { GetPostUseCase } from '../../domain/blog/application/use-cases/get-post-use-case';
+import { DeletePostUseCase } from '../../domain/blog/application/use-cases/delete-post-use-case';
+import { CommentOnPostUseCase } from '../../domain/blog/application/use-cases/comment-on-post-use-case';
+import { FetchPostCommentsUseCase } from '../../domain/blog/application/use-cases/fetch-post-comments-use-case';
+import { DeleteCommentUseCase } from '../../domain/blog/application/use-cases/delete-comment-use-case';
 import { CreatePaymentController } from './controllers/create-payment.controller';
 import { CreatePaymentUseCase } from '../../domain/payment/application/use-cases/create-payment-use-case';
 
@@ -27,20 +58,38 @@ import { CreatePaymentUseCase } from '../../domain/payment/application/use-cases
     CryptographyModule,
     PaymentModule,
     StorageModule,
-    MessagingModule
+    MessagingModule,
+    EnvModule,
+    NotificationsModule
   ],
   controllers: [
     //User
     AuthenticateController,
     CreateAccountController,
     GetUserController,
+    GitHubAuthController,
+    VerifyEmailController,
+    ResendEmailVerificationController,
 
     //chat
     SendMessageController,
     CreateChatController,
 
     //Payment
-    CreatePaymentController
+    CreatePaymentController,
+    CreateCheckoutSessionController,
+    CreateBillingPortalSessionController,
+    GetSubscriptionController,
+    BillingWebhookController,
+
+    //Blog
+    CreatePostController,
+    FetchRecentPostsController,
+    GetPostController,
+    DeletePostController,
+    CommentOnPostController,
+    FetchPostCommentsController,
+    DeleteCommentController
   ],
   providers: [
     SendMessageUseCase,
@@ -49,12 +98,29 @@ import { CreatePaymentUseCase } from '../../domain/payment/application/use-cases
     AuthenticateUserUseCase,
     CreateAccountUseCase,
     GetUserUseCase,
+    VerifyEmailUseCase,
+    SendEmailVerificationUseCase,
+    AuthenticateWithOAuthUseCase,
+    GitHubOAuthService,
 
     //AI
     CreateChatUseCase,
 
     //Payment
     CreatePaymentUseCase,
+    CreateCheckoutSessionUseCase,
+    CreateBillingPortalSessionUseCase,
+    GetSubscriptionUseCase,
+    HandleBillingEventUseCase,
+
+    //Blog
+    CreatePostUseCase,
+    FetchRecentPostsUseCase,
+    GetPostUseCase,
+    DeletePostUseCase,
+    CommentOnPostUseCase,
+    FetchPostCommentsUseCase,
+    DeleteCommentUseCase,
   ],
 })
 

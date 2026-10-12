@@ -7,17 +7,21 @@ import { Env } from "../../env/env";
 
 @Injectable()
 export class GroqProvider implements AiService {
+  private readonly client: OpenAI
+
   constructor(
-    private env: ConfigService<Env, true>,
-  ) {}
+    env: ConfigService<Env, true>,
+  ) {
+    // API do Groq é compatível com a da OpenAI, só muda a URL
+    this.client = new OpenAI({
+      apiKey: env.get('GROQ_API_KEY'),
+      baseURL: 'https://api.groq.com/openai/v1',
+    })
+  }
 
   async chat(messages: AiMessage[]) {
-    const chat = new OpenAI({
-      apiKey: this.env.get('GROQ_API_KEY'),
-    })
-
     const completion =
-      await chat.chat.completions.create({
+      await this.client.chat.completions.create({
         model: 'llama-3.3-70b-versatile',
         messages,
       })

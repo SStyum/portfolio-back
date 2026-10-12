@@ -1,3 +1,6 @@
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { SWAGGER_BEARER } from "../swagger/setup-swagger";
+import { ApiZodBody } from "../swagger/api-zod-body";
 import { BadGatewayException, BadRequestException, Body, Controller, HttpCode, Post } from "@nestjs/common";
 import z from "zod";
 import { CreatePaymentUseCase } from "../../../domain/payment/application/use-cases/create-payment-use-case";
@@ -15,12 +18,16 @@ const createPaymentBodySchema = z.object({
 
 type CreatePaymentBodySchema = z.infer<typeof createPaymentBodySchema>
 
+@ApiTags('Payments')
+@ApiBearerAuth(SWAGGER_BEARER)
 @Controller('/payments')
 export class CreatePaymentController {
   constructor(
     private createPaymentUseCase: CreatePaymentUseCase
   ) { }
 
+  @ApiOperation({ summary: 'Cria um pagamento avulso' })
+  @ApiZodBody(createPaymentBodySchema)
   @Post()
   @HttpCode(201)
   async handle(
