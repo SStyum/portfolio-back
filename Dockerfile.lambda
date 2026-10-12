@@ -1,0 +1,20 @@
+# Imagem da API pra rodar na Lambda (atrás do API Gateway). Buildada pelo CDK em deploy/.
+FROM public.ecr.aws/lambda/nodejs:24 AS build
+WORKDIR /build
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+# prisma generate não conecta no banco, mas o prisma.config.ts exige a variável
+RUN DATABASE_URL=postgresql://build:build@localhost:5432/build npx prisma generate \
+  && npm run build \
+  && npm prune --omit=dev
+
+FROM public.ecr.aws/lambda/nodejs:24
+WORKDIR ${LAMBDA_TASK_ROOT}
+
+COPY --from=build /build/node_modules ./node_modules
+COPY --from=build /build/dist ./dist
+
+CMD ["dist/src/infra/lambda.handler"]

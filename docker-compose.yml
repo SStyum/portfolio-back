@@ -9,3 +9,14 @@ services:
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: portfolio
       PGDATA: /data/postgres
+
+  # Emula S3, SQS e Secrets Manager localmente (http://localhost:4566)
+  localstack:
+    container_name: portfolio-localstack
+    image: localstack/localstack:4.12
+    ports:
+      - 4566:4566
+    environment:
+      SERVICES: s3,sqs,secretsmanager
+    volumes:
+      - ./localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh

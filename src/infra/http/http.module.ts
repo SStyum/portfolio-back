@@ -14,6 +14,8 @@ import { GetUserUseCase } from '../../domain/user/application/use-cases/get-user
 import { GetUserController } from './controllers/get-user.controller';
 import { CryptographyModule } from '../cryptography/cryptography.module';
 import { PaymentModule } from '../providers/payment.module';
+import { StorageModule } from '../storage/storage.module';
+import { MessagingModule } from '../messaging/messaging.module';
 import { CreatePaymentController } from './controllers/create-payment.controller';
 import { CreatePaymentUseCase } from '../../domain/payment/application/use-cases/create-payment-use-case';
 
@@ -23,7 +25,9 @@ import { CreatePaymentUseCase } from '../../domain/payment/application/use-cases
     AIModule,
     AuthModule,
     CryptographyModule,
-    PaymentModule
+    PaymentModule,
+    StorageModule,
+    MessagingModule
   ],
   controllers: [
     //User
