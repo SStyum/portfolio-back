@@ -14,6 +14,15 @@ export const envSchema = z.object({
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
 
+}).superRefine((env, ctx) => {
+  // Cada provider exige as próprias credenciais só quando estiver ativo
+  if (env.PAYMENT_PROVIDER === "STRIPE" && !env.STRIPE_SECRET_KEY) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["STRIPE_SECRET_KEY"],
+      message: "STRIPE_SECRET_KEY is required when PAYMENT_PROVIDER=STRIPE",
+    })
+  }
 })
 
 export type Env = z.infer<typeof envSchema>

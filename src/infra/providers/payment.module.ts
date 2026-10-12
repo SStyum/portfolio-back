@@ -1,6 +1,5 @@
 import { Module, Type } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
-import { CreatePaymentUseCase } from '../../domain/payment/application/use-cases/create-payment-use-case';
 import { PaymentGateway } from '../../domain/payment/application/gateway/payment.gateway';
 import { PaymentProviderName } from '../../domain/payment/enterprise/entities/payment';
 import { EnvModule } from '../env/env.module';
@@ -22,8 +21,7 @@ const PAYMENT_GATEWAYS: Record<PaymentProviderName, Type<PaymentGateway>> = {
       useFactory: (env: EnvService, moduleRef: ModuleRef) =>
         moduleRef.create(PAYMENT_GATEWAYS[env.get('PAYMENT_PROVIDER')]),
     },
-    CreatePaymentUseCase,
   ],
-  exports: [CreatePaymentUseCase],
+  exports: [PaymentGateway],
 })
 export class PaymentModule {}

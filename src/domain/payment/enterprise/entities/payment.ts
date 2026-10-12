@@ -76,6 +76,10 @@ export class Payment extends Entity<PaymentProps> {
     return this.props.metadata ?? {}
   }
 
+  get eventId() {
+    return this.props.eventId
+  }
+
   get createdAt() {
     return this.props.createdAt
   }

@@ -46,13 +46,17 @@ export class StripePaymentGateway implements PaymentGateway {
       automatic_payment_methods: { enabled: true },
     });
 
+    if (!intent.client_secret) {
+      throw new Error(`Stripe PaymentIntent ${intent.id} sem client_secret`);
+    }
+
     return {
       externalId: intent.id,
       externalCustomerId: typeof intent.customer === 'string'
         ? intent.customer
         : intent.customer?.id,
       status: this.mapStatus(intent.status),
-      clientPayload: { clientSecret: intent.client_secret },
+      clientPayload: { type: 'client_secret', clientSecret: intent.client_secret },
     };
   }
 

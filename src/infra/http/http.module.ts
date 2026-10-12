@@ -13,13 +13,17 @@ import { CreateChatUseCase } from '../../domain/AI/application/use-cases/create-
 import { GetUserUseCase } from '../../domain/user/application/use-cases/get-user-use-case';
 import { GetUserController } from './controllers/get-user.controller';
 import { CryptographyModule } from '../cryptography/cryptography.module';
+import { PaymentModule } from '../providers/payment.module';
+import { CreatePaymentController } from './controllers/create-payment.controller';
+import { CreatePaymentUseCase } from '../../domain/payment/application/use-cases/create-payment-use-case';
 
 @Module({
   imports: [
     DatabaseModule,
     AIModule,
     AuthModule,
-    CryptographyModule
+    CryptographyModule,
+    PaymentModule
   ],
   controllers: [
     //User
@@ -29,7 +33,10 @@ import { CryptographyModule } from '../cryptography/cryptography.module';
 
     //chat
     SendMessageController,
-    CreateChatController
+    CreateChatController,
+
+    //Payment
+    CreatePaymentController
   ],
   providers: [
     SendMessageUseCase,
@@ -42,7 +49,8 @@ import { CryptographyModule } from '../cryptography/cryptography.module';
     //AI
     CreateChatUseCase,
 
-
+    //Payment
+    CreatePaymentUseCase,
   ],
 })
 

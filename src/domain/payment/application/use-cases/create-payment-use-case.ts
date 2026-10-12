@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { PaymentGateway } from '../gateway/payment.gateway';
-import { Either, right } from '../../../../core/either';
+import { PaymentClientPayload, PaymentGateway } from '../gateway/payment.gateway';
+import { Either, left, right } from '../../../../core/either';
 import { Payment } from '../../enterprise/entities/payment';
 import { PaymentsRepository } from '../repository/payments-repository';
 import { UniqueEntityId } from '../../../../core/entities/unique-entity-id';
+import { PaymentGatewayError } from './errors/payment-gateway-error';
 
 interface CreatePaymentUseCaseRequest {
   userId: string;
@@ -13,9 +14,9 @@ interface CreatePaymentUseCaseRequest {
   metadata?: Record<string, string>;
 }
 
-type CreatePaymentUseCaseResponse = Either<null, {
+type CreatePaymentUseCaseResponse = Either<PaymentGatewayError, {
   payment: Payment
-  clientPayload: Record<string, unknown>
+  clientPayload: PaymentClientPayload
 }>
 
 @Injectable()
@@ -26,13 +27,19 @@ export class CreatePaymentUseCase {
   ) { }
   async execute({ userId, amount, currency, customerId, metadata }: CreatePaymentUseCaseRequest): Promise<CreatePaymentUseCaseResponse> {
 
-    const result = await this.paymentGateway.createPayment({
-      userId,
-      amount,
-      currency,
-      customerId,
-      metadata
-    });
+    let result: Awaited<ReturnType<PaymentGateway['createPayment']>>
+
+    try {
+      result = await this.paymentGateway.createPayment({
+        userId,
+        amount,
+        currency,
+        customerId,
+        metadata
+      });
+    } catch {
+      return left(new PaymentGatewayError(this.paymentGateway.name))
+    }
 
     const payment = Payment.create({
       userId: new UniqueEntityId(userId),
@@ -43,7 +50,6 @@ export class CreatePaymentUseCase {
       currency: currency,
       status: result.status,
       metadata: metadata,
-      eventId: "",
       createdAt: new Date(),
     });
 

@@ -8,14 +8,22 @@ export interface CreatePaymentInput {
   metadata?: Record<string, string>
 }
 
+// O que o frontend precisa pra concluir o pagamento. O `type` diz como o front deve agir.
+export type PaymentClientPayload =
+  // SDK no front confirma o pagamento (ex.: Stripe Elements)
+  | { type: "client_secret"; clientSecret: string }
+  // Checkout hospedado pela API — o front só redireciona
+  | { type: "redirect"; url: string }
+  // PIX — o front exibe o QR code / copia e cola
+  | { type: "pix"; qrCode: string; qrCodeBase64?: string; expiresAt?: Date }
+
 export interface CreatePaymentOutput {
   // ID do pagamento na API externa (PaymentIntent da Stripe, preference do MercadoPago, etc.)
   externalId: string
   externalCustomerId?: string
   // Já convertido pro status do domínio — cada gateway faz seu próprio mapeamento
   status: PaymentStatus
-  // Opaco pro domínio — o que o frontend precisa pra concluir o pagamento (clientSecret, checkoutUrl, qrCode...)
-  clientPayload: Record<string, unknown>
+  clientPayload: PaymentClientPayload
 }
 
 export abstract class PaymentGateway {
