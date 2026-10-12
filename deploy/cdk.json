@@ -1,6 +1,8 @@
 {
   "app": "npx tsx bin/app.ts",
   "context": {
-    "secretName": "portfolio/app"
+    "secretName": "portfolio/app",
+    "frontendUrl": "https://playground-de-engenheiro.example.com",
+    "emailFrom": "Playground de Engenheiro <no-reply@playground-de-engenheiro.example.com>"
   }
 }

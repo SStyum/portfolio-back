@@ -1,0 +1,42 @@
+{
+  "users": [
+    {
+      "name": "docker",
+      "password_hash": "wcWBxfDmqQnNje2mLrOT5vyPJtmamAv06k0bfKQw4MgR48/Z",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": ["administrator"]
+    }
+  ],
+  "vhosts": [{ "name": "/" }],
+  "permissions": [
+    { "user": "docker", "vhost": "/", "configure": ".*", "write": ".*", "read": ".*" }
+  ],
+  "exchanges": [
+    { "name": "portfolio.events", "vhost": "/", "type": "topic", "durable": true, "auto_delete": false, "internal": false, "arguments": {} },
+    { "name": "portfolio.events.dlx", "vhost": "/", "type": "topic", "durable": true, "auto_delete": false, "internal": false, "arguments": {} }
+  ],
+  "queues": [
+    {
+      "name": "notifications",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "quorum",
+        "x-delivery-limit": 5,
+        "x-dead-letter-exchange": "portfolio.events.dlx"
+      }
+    },
+    {
+      "name": "notifications.dlq",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": { "x-queue-type": "quorum" }
+    }
+  ],
+  "bindings": [
+    { "source": "portfolio.events", "vhost": "/", "destination": "notifications", "destination_type": "queue", "routing_key": "comment.*", "arguments": {} },
+    { "source": "portfolio.events.dlx", "vhost": "/", "destination": "notifications.dlq", "destination_type": "queue", "routing_key": "#", "arguments": {} }
+  ]
+}

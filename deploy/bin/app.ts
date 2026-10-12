@@ -9,4 +9,6 @@ new PortfolioStack(app, 'PortfolioStack', {
     region: process.env.CDK_DEFAULT_REGION,
   },
   secretName: app.node.tryGetContext('secretName'),
+  frontendUrl: app.node.tryGetContext('frontendUrl'),
+  emailFrom: app.node.tryGetContext('emailFrom'),
 });

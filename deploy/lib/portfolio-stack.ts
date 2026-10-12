@@ -7,14 +7,19 @@ import { InstanceClass, InstanceSize, InstanceType, Peer, Port, SecurityGroup, S
 import { Platform } from 'aws-cdk-lib/aws-ecr-assets';
 import { Architecture, DockerImageCode, DockerImageFunction } from 'aws-cdk-lib/aws-lambda';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Credentials, DatabaseInstance, DatabaseInstanceEngine, PostgresEngineVersion, StorageType } from 'aws-cdk-lib/aws-rds';
 import { BlockPublicAccess, Bucket, BucketEncryption, HttpMethods } from 'aws-cdk-lib/aws-s3';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Queue, QueueEncryption } from 'aws-cdk-lib/aws-sqs';
 
 interface PortfolioStackProps extends StackProps {
-  // Secret JSON com JWT_*, GROQ_API_KEY, STRIPE_* — criado fora do CDK pra não vazar no template
+  // Secret JSON com JWT_*, GROQ_API_KEY, STRIPE_*, GITHUB_* — criado fora do CDK pra não vazar no template
   secretName: string;
+  // URL do front (retorno do checkout, links dos e-mails, login com GitHub)
+  frontendUrl: string;
+  // Remetente dos e-mails. O domínio/e-mail precisa estar verificado no SES
+  emailFrom: string;
 }
 
 export class PortfolioStack extends Stack {
@@ -115,6 +120,9 @@ export class PortfolioStack extends Stack {
         S3_BUCKET: bucket.bucketName,
         MESSAGING_PROVIDER: 'SQS',
         SQS_QUEUE_URL: eventsQueue.queueUrl,
+        EMAIL_PROVIDER: 'SES',
+        EMAIL_FROM: props.emailFrom,
+        FRONTEND_URL: props.frontendUrl,
       },
     });
 
@@ -123,6 +131,10 @@ export class PortfolioStack extends Stack {
     database.secret!.grantRead(apiFunction);
     bucket.grantReadWrite(apiFunction);
     eventsQueue.grantSendMessages(apiFunction);
+    apiFunction.addToRolePolicy(new PolicyStatement({
+      actions: ['ses:SendEmail'],
+      resources: [`arn:aws:ses:${this.region}:${this.account}:identity/*`],
+    }));
 
     // ---------- API Gateway (HTTP API) → Lambda
     const api = new HttpApi(this, 'HttpApi', {
