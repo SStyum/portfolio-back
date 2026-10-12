@@ -1,12 +1,13 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from 'passport-jwt'
 import { z } from "zod";
 import { EnvService } from "../env/env.service";
 
+// Exige `sub`: tokens de outros propósitos (verificação de e-mail, state do OAuth) não passam
 const tokenPayloadSchema = z.object({
   sub: z.string().uuid(),
-  role: z.enum(['FREE', 'ADM']).default('FREE'),
+  role: z.enum(['USER', 'ADMIN']).default('USER'),
 })
 
 export type UserPayload = z.infer<typeof tokenPayloadSchema>
@@ -24,19 +25,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: UserPayload) {
-    try {
-      // Faz a validação com o Zod e garante o default 'FREE'
-      const user = tokenPayloadSchema.parse(payload);
+    const result = tokenPayloadSchema.safeParse(payload)
 
-      // Caso o role não esteja presente, coloca o valor padrão
-      if (!user.role) {
-        user.role = 'FREE'; // Garantir que o role seja 'FREE'
-      }
-
-      return user;
-    } catch (error) {
-      // Caso falhe a validação, lançar erro
-      throw new Error('Invalid token payload');
+    if (!result.success) {
+      throw new UnauthorizedException('Invalid token payload')
     }
+
+    // Tokens antigos sem "role" caem no default 'USER'
+    return result.data
   }
 }
