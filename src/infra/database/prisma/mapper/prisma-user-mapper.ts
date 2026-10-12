@@ -8,6 +8,10 @@ export class PrismaUserMapper {
       name: raw.name,
       email: raw.email,
       password: raw.password ?? undefined,
+      plan: raw.plan,
+      role: raw.role,
+      billingCustomerId: raw.billingCustomerId ?? undefined,
+      emailVerifiedAt: raw.emailVerifiedAt ?? undefined,
     },
       new UniqueEntityId(raw.id)
     )
@@ -19,6 +23,10 @@ export class PrismaUserMapper {
       name: user.name,
       email: user.email,
       password: user.password || null,
+      plan: user.plan,
+      role: user.role,
+      billingCustomerId: user.billingCustomerId ?? null,
+      emailVerifiedAt: user.emailVerifiedAt ?? null,
     }
   }
 }

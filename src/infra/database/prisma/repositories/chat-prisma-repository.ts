@@ -24,11 +24,35 @@ implements ChatRepository{
 
 
     async findById(id: string): Promise<Chat | null> {
-        throw new Error("Method not implemented.");
+        const chat = await this.prisma.chat.findUnique({
+            where: {
+                id
+            },
+            include: {
+                messages: {
+                    orderBy: {
+                        createdAt: 'asc'
+                    }
+                }
+            }
+        })
+
+        if (!chat) {
+            return null
+        }
+
+        return PrismaChatMapper.toDomain(chat)
     }
 
     async save(chat: Chat): Promise<void> {
-        throw new Error("Method not implemented.");
+        await this.prisma.chat.update({
+            where: {
+                id: chat.id.toString()
+            },
+            data: {
+                title: chat.title
+            }
+        })
     }
 
 }

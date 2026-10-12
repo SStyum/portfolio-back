@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { DomainEvents } from "../../../../core/events/domain-events";
 import { UsersRepository } from "../../../../domain/user/application/repositories/users-respository";
 import { User } from "../../../../domain/user/enterprise/entities/user";
 import { PrismaUserMapper } from "../mapper/prisma-user-mapper";
@@ -30,6 +31,9 @@ export class PrismaUserRepository implements UsersRepository {
     await this.prisma.user.create({
       data
     })
+
+    // Só dispara os eventos (ex.: e-mail de verificação) depois que o usuário está salvo
+    DomainEvents.dispatchEventsForAggregate(user.id)
   }
 
   async findByEmail(email: string): Promise<User | null> {
@@ -46,16 +50,28 @@ export class PrismaUserRepository implements UsersRepository {
     return PrismaUserMapper.toDomain(user)
   }
 
+  async findByBillingCustomerId(billingCustomerId: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        billingCustomerId,
+      },
+    })
+
+    if (!user) {
+      return null
+    }
+
+    return PrismaUserMapper.toDomain(user)
+  }
+
   async save(user: User): Promise<void> {
     const data = PrismaUserMapper.toPrisma(user)
 
-    await Promise.all([
-      this.prisma.user.update({
-        where: {
-          id: data.id
-        },
-        data
-      })
-    ])
+    await this.prisma.user.update({
+      where: {
+        id: data.id
+      },
+      data
+    })
   }
 }

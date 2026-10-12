@@ -21,9 +21,32 @@ export class PrismaMessageRepository
         })
     }
 
-    async findByChatId(chatId: string): Promise<Message[]> {
-        throw new Error("Method not implemented.");
+    async findByChatId(chatId: string, limit?: number): Promise<Message[]> {
+        // Busca as mais recentes e devolve em ordem cronológica
+        const messages = await this.prisma.message.findMany({
+            where: {
+                chatId
+            },
+            orderBy: {
+                createdAt: 'desc'
+            },
+            take: limit
+        })
+
+        return messages.reverse().map(PrismaMessageMapper.toDomain)
     }
 
-
+    async countUserMessagesSince(userId: string, since: Date): Promise<number> {
+        return this.prisma.message.count({
+            where: {
+                role: 'user',
+                createdAt: {
+                    gte: since
+                },
+                chat: {
+                    userId
+                }
+            }
+        })
+    }
 }

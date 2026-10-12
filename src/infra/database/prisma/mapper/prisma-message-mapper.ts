@@ -8,7 +8,7 @@ export class PrismaMessageMapper {
         chatId: raw.chatId,
         content: raw.content,
         createdAt: raw.createdAt,
-        role: raw.role as 'user' || 'assistant'
+        role: raw.role as Message['role']
     },
       new UniqueEntityId(raw.id)
     )
@@ -19,7 +19,8 @@ export class PrismaMessageMapper {
       id: message.id.toString(),
       chatId: message.chatId,
       content: message.content,
-      role: message.role
+      role: message.role,
+      createdAt: message.createdAt
     }
   }
 }
