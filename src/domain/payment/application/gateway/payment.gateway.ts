@@ -1,4 +1,5 @@
 import { PaymentProviderName, PaymentStatus } from "../../enterprise/entities/payment";
+import { SubscriptionStatus } from "../../enterprise/entities/subscription";
 
 export interface CreatePaymentInput {
   userId: string
@@ -26,8 +27,67 @@ export interface CreatePaymentOutput {
   clientPayload: PaymentClientPayload
 }
 
+export interface CreateCustomerInput {
+  userId: string
+  name: string
+  email: string
+}
+
+export interface CreateCheckoutSessionInput {
+  userId: string
+  customerId: string
+  successUrl: string
+  cancelUrl: string
+}
+
+export interface CreateBillingPortalSessionInput {
+  customerId: string
+  returnUrl: string
+}
+
+// Eventos de cobrança já normalizados: o domínio não conhece o formato de nenhuma API
+export type BillingEvent =
+  | {
+    type: "subscription.updated"
+    eventId: string
+    occurredAt: Date
+    externalCustomerId: string
+    externalSubscriptionId: string
+    status: SubscriptionStatus
+    currentPeriodEnd?: Date
+    cancelAtPeriodEnd: boolean
+  }
+  | {
+    type: "invoice.paid"
+    eventId: string
+    occurredAt: Date
+    externalCustomerId: string
+    externalInvoiceId: string
+    amount: number
+    currency: string
+  }
+
+export class InvalidWebhookSignatureError extends Error {
+  constructor() {
+    super("Invalid webhook signature")
+  }
+}
+
 export abstract class PaymentGateway {
   abstract readonly name: PaymentProviderName
+
+  // Pagamento avulso
   abstract createPayment(input: CreatePaymentInput): Promise<CreatePaymentOutput>
   abstract cancelPayment(externalId: string): Promise<void>
+
+  // Assinatura
+  abstract createCustomer(input: CreateCustomerInput): Promise<{ customerId: string }>
+  abstract createCheckoutSession(input: CreateCheckoutSessionInput): Promise<{ url: string }>
+  abstract createBillingPortalSession(input: CreateBillingPortalSessionInput): Promise<{ url: string }>
+
+  /**
+   * Valida a assinatura do webhook e traduz o evento.
+   * Retorna null pra eventos que não interessam. Lança InvalidWebhookSignatureError se a assinatura for inválida.
+   */
+  abstract parseWebhookEvent(rawBody: Buffer, headers: Record<string, string | string[] | undefined>): Promise<BillingEvent | null>
 }
