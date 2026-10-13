@@ -19,6 +19,7 @@ Documento vivo com tudo que foi implementado no backend. Cada entrada nova entra
 | 2026-10-12 | — | Swagger em `/docs` (bodies gerados dos schemas Zod) |
 | 2026-10-12 | — | 61 testes unitários (in-memory + fakes) e CI no GitHub Actions |
 | 2026-10-12 | — | 39 testes E2E (app real + Postgres real isolado por arquivo) e job de E2E no CI |
+| 2026-10-12 | — | Front-end em forma de jogo 3D (`../portfolio-front`): vila explorável com setores do portfólio; Grafana liberado pra iframe |
 
 ## Sumário
 
@@ -39,6 +40,7 @@ Documento vivo com tudo que foi implementado no backend. Cada entrada nova entra
 15. [Testes e CI](#15-testes-e-ci)
 16. [Variáveis de ambiente](#16-variáveis-de-ambiente)
 17. [Pendências conhecidas](#17-pendências-conhecidas)
+18. [Front-end: Vila do Portfólio](#18-front-end-vila-do-portfólio)
 
 ---
 
@@ -776,7 +778,7 @@ A validação fica em `src/infra/env/env.ts`. Credenciais de cada provider só s
 - [ ] **Rate limit em memória:** cada instância da Lambda tem o seu contador. Para um limite global de verdade, use um storage Redis no `ThrottlerModule`.
 - [ ] **Healthcheck, logs estruturados com request ID e Sentry.**
 - [ ] **LGPD:** termos, política de privacidade e exclusão de conta.
-- [ ] **Frontend.**
+- [ ] **Frontend:** preencher bio, projetos e contatos em `portfolio-front/src/content.ts`; tela de login/chat com IA ainda não existe no jogo.
 - [ ] **Outbox Pattern** para publicar eventos (ex.: `payment.created`) com segurança.
 - [ ] **Consumidores das filas:** um worker para a `notifications` do RabbitMQ e uma Lambda com event source para a SQS.
 - [ ] **O publisher do RabbitMQ espera indefinidamente pela reconexão.** Uma mensagem publicada com o broker fora do ar fica em memória até ele voltar, e se perde se o processo cair nesse meio-tempo. O Outbox resolve isso.
@@ -784,3 +786,37 @@ A validação fica em `src/infra/env/env.ts`. Credenciais de cada provider só s
 - [ ] **`OnCommentCreated` busca o post de novo** para descobrir o autor. Daria para levar o `postAuthorId` no evento.
 - [ ] **Restringir o CORS** do bucket e da API ao domínio do front.
 - [ ] **Validar em uma conta AWS real** o primeiro `cdk deploy` e o `deploy/scripts/migrate.sh`.
+
+---
+
+## 18. Front-end: Vila do Portfólio
+
+### Como usar
+
+```bash
+cd ../portfolio-front
+npm install
+npm run dev   # http://localhost:5173 (é o FRONTEND_URL padrão)
+```
+
+Com a API (`npm run start:dev`) e o monitoramento (`docker compose up -d postgres prometheus grafana`) no ar, os painéis mostram dados reais. Sem eles, o jogo roda igual e os painéis explicam o que subir.
+
+Cada setor da vila consome uma parte do back-end:
+
+| Setor | Rotas usadas |
+|---|---|
+| Blog (Casa de Chá) | `GET /posts`, `GET /posts/:postId`, `GET /posts/:postId/comments` |
+| Observabilidade (Torre de Vigia) | `GET /metrics` a cada 5 s + link/iframe do dashboard `portfolio-api` no Grafana |
+| Documentação da API (Biblioteca) | `GET /docs-json` (lista os endpoints por tag) + link pro `/docs` |
+
+URLs configuráveis no `.env` do front: `VITE_API_URL`, `VITE_GRAFANA_URL`, `VITE_PROMETHEUS_URL`.
+
+### Como foi feito
+
+- **Projeto separado** (`portfolio-front`), Vite + TypeScript + Three.js, sem modelos ou texturas externas: terreno, casas, personagem e vegetação são gerados por código.
+- **Mundo:** vale cercado de penhascos com terraço norte (muro de pedra + escadaria), lago, caminhos de terra, portal na entrada. A planta toda fica em `src/world/layout.ts`; terreno, minimapa e colisões derivam dela.
+- **Jogador:** câmera em terceira pessoa (pointer lock ou arrastar), andar/correr/pular, colisão 2D com círculos e caixas rotacionadas, joystick de toque no celular.
+- **Navegação:** feixe de luz em cada setor (enfraquece depois de visitado, salvo no `localStorage`), banner ao descobrir um local, minimapa e mapa (`M`) com viagem rápida.
+- **Métricas:** o painel lê o formato texto do Prometheus direto de `/metrics` (parser em `src/api.ts`). Se `METRICS_TOKEN` estiver definido, ele avisa e aponta pro Grafana.
+- **docker-compose:** o Grafana ganhou `GF_SECURITY_ALLOW_EMBEDDING` e acesso anônimo de leitura (`Viewer`) pra o dashboard poder ser embutido no jogo. Isso é só pro ambiente local; num Grafana público, avalie antes de liberar o anônimo.
+
